@@ -1,5 +1,4 @@
 const form = document.querySelector('form');
-console.log(form);
 const countryInput = document.querySelector('#country');
 const errorCountry = document.querySelector('.errorCountry');
 const zipInput = document.querySelector('#zipcode');
@@ -10,20 +9,88 @@ const confirmPasswordInput = document.querySelector('#confirmPassword');
 const errorConfirmPassword = document.querySelector('.errorConfirmPassword');
 const emailInput = document.querySelector('#email');
 const errorMail = document.querySelector('.errorMail');
+const button = document.querySelector('#button');
 const regZip = new RegExp('^[0-9]*$');
 
+console.log(zipInput.validity.valueMissing);
+
+let findZipErrors = () => {
+  if (zipInput.value === '') {
+    zipInput.style.backgroundColor = '#ffb5b5';
+    errorZipcode.textContent = '*This field can not be empty';
+    return false;
+  } else if (zipInput.validity.tooShort) {
+    zipInput.style.backgroundColor = '#ffb5b5';
+    errorZipcode.textContent = '*This field can not be less than 4 digits long';
+    return false;
+  } else if (regZip.test(zipInput.value) == false) {
+    zipInput.style.backgroundColor = '#ffb5b5';
+    errorZipcode.textContent = '*This field should contain numbers';
+    return false;
+  } else return true;
+};
+
+let findCountryErrors = () => {
+  if (countryInput.value === '') {
+    countryInput.style.backgroundColor = '#ffb5b5';
+    errorCountry.textContent = '*This field can not be empty';
+    return false;
+  } else return true;
+};
+
+let findPasswordErrors = () => {
+  if (passwordInput.value === '') {
+    console.log('?');
+    errorPassword.textContent = '*This field can not be empty';
+    passwordInput.style.backgroundColor = '#ffb5b5';
+    return false;
+  } else if (passwordInput.validity.tooShort) {
+    errorPassword.textContent = '*Password must be at least 8 characters long';
+    passwordInput.style.backgroundColor = '#ffb5b5';
+    return false;
+  } else if (passwordInput.validity.tooLong) {
+    errorPassword.textContent = 'Password must be at least 16 characters long';
+    passwordInput.style.backgroundColor = '#ffb5b5';
+    return false;
+  } else if (passwordInput.validity.valid) {
+    errorPassword.textContent = '';
+    passwordInput.style.backgroundColor = '#ffffff';
+    return false;
+  }
+};
+
+let PasswordsMatch = () => {
+  if (
+    confirmPasswordInput.value !== passwordInput.value &&
+    confirmPasswordInput.value.length >= 8 &&
+    passwordInput.value.length >= 8
+  ) {
+    passwordInput.style.backgroundColor = '#ffb5b5';
+    confirmPasswordInput.style.backgroundColor = '#ffb5b5';
+    errorConfirmPassword.textContent = '*Passwords do not match';
+    return false;
+  }
+};
+
+let findEmailErrors = () => {
+  if (emailInput.value === '') {
+    emailInput.style.backgroundColor = '#ffb5b5';
+    errorMail.textContent = '*This field can not be empty';
+    return false;
+  } else if (emailInput.validity.typeMismatch) {
+    emailInput.style.backgroundColor = '#ffb5b5';
+    errorMail.textContent = '*Input a valid e-mail adress';
+    return false;
+  }
+};
+
 countryInput.addEventListener('input', () => {
-  countryInput.addEventListener('mouseleave', () => {
-    if (countryInput.validity.valid) {
-      errorCountry.textContent = '';
-      countryInput.style.backgroundColor = '#ffffff';
-    }
-  });
+  countryInput.addEventListener('mouseleave', findCountryErrors);
 });
 
 countryInput.addEventListener('click', () => {
   countryInput.addEventListener('mouseleave', () => {
-    if (countryInput.validity.valueMissing) {
+    if (countryInput.value === '') {
       countryInput.style.backgroundColor = '#ffb5b5';
       errorCountry.textContent = '*This field can not be empty';
     }
@@ -38,19 +105,7 @@ zipInput.addEventListener('input', () => {
 });
 
 zipInput.addEventListener('click', () => {
-  zipInput.addEventListener('mouseleave', () => {
-    if (zipInput.validity.valueMissing) {
-      zipInput.style.backgroundColor = '#ffb5b5';
-      errorZipcode.textContent = '*This field can not be empty';
-    } else if (zipInput.validity.tooShort) {
-      zipInput.style.backgroundColor = '#ffb5b5';
-      errorZipcode.textContent =
-        '*This field can not be less than 4 digits long';
-    } else if (regZip.test(zipInput.value) == false) {
-      zipInput.style.backgroundColor = '#ffb5b5';
-      errorZipcode.textContent = '*This field should contain numbers';
-    }
-  });
+  zipInput.addEventListener('mouseleave', findZipErrors);
 });
 
 passwordInput.addEventListener('input', () => {
@@ -61,36 +116,18 @@ passwordInput.addEventListener('input', () => {
 });
 
 passwordInput.addEventListener('click', () => {
-  passwordInput.addEventListener('mouseleave', () => {
-    if (passwordInput.validity.tooShort) {
-      errorPassword.textContent = 'Password must be at least 8 characters long';
-      passwordInput.style.backgroundColor = '#ffb5b5';
-    } else if (passwordInput.validity.tooLong) {
-      errorPassword.textContent =
-        'Password must be at least 16 characters long';
-      passwordInput.style.backgroundColor = '#ffb5b5';
-    } else if (passwordInput.validity.valid) {
-      errorPassword.textContent = '';
-      passwordInput.style.backgroundColor = '#ffffff';
-    }
-  });
+  passwordInput.addEventListener('mouseleave', findPasswordErrors);
 });
 
 confirmPasswordInput.addEventListener('click', () => {
-  confirmPasswordInput.addEventListener('mouseleave', () => {
-    if (confirmPasswordInput.value !== passwordInput.value) {
-      passwordInput.style.backgroundColor = '#ffb5b5';
-      confirmPasswordInput.style.backgroundColor = '#ffb5b5';
-      errorConfirmPassword.textContent = 'Passwords do not match';
-    }
-  });
+  confirmPasswordInput.addEventListener('mouseleave', () => PasswordsMatch);
 });
 
 confirmPasswordInput.addEventListener('input', () => {
   if (confirmPasswordInput.value !== passwordInput.value) {
     passwordInput.style.backgroundColor = '#ffb5b5';
     confirmPasswordInput.style.backgroundColor = '#ffb5b5';
-    errorConfirmPassword.textContent = 'Passwords do not match';
+    errorConfirmPassword.textContent = '*Passwords do not match';
   } else {
     passwordInput.style.backgroundColor = '#ffffff';
     confirmPasswordInput.style.backgroundColor = '#ffffff';
@@ -106,14 +143,7 @@ emailInput.addEventListener('input', () => {
 });
 
 emailInput.addEventListener('click', () => {
-  emailInput.addEventListener('mouseleave', () => {
-    if (emailInput.validity.typeMismatch) {
-      emailInput.style.backgroundColor = '#ffb5b5';
-      errorMail.textContent = 'Input a valid e-mail adress';
-    }
-  });
+  emailInput.addEventListener('mouseleave', findEmailErrors);
 });
 
-// passwordInput.addEventListener('click');
-
-document.addEventListener('submit', () => {});
+form.addEventListener('submit', function (event) {});
