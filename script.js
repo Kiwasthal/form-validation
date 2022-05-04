@@ -1,16 +1,22 @@
+const form = document.querySelector('form');
+console.log(form);
 const countryInput = document.querySelector('#country');
 const errorCountry = document.querySelector('.errorCountry');
 const zipInput = document.querySelector('#zipcode');
 const errorZipcode = document.querySelector('.errorZipcode');
 const passwordInput = document.querySelector('#password');
+const errorPassword = document.querySelector('.errorPassword');
 const confirmPasswordInput = document.querySelector('#confirmPassword');
+const errorConfirmPassword = document.querySelector('.errorConfirmPassword');
 const emailInput = document.querySelector('#email');
 const regZip = new RegExp('^[0-9]*$');
 
 countryInput.addEventListener('input', () => {
   countryInput.addEventListener('mouseleave', () => {
-    errorCountry.textContent = '';
-    countryInput.style.backgroundColor = '#ffffff';
+    if (countryInput.validity.valid) {
+      errorCountry.textContent = '';
+      countryInput.style.backgroundColor = '#ffffff';
+    }
   });
 });
 
@@ -24,8 +30,10 @@ countryInput.addEventListener('click', () => {
 });
 
 zipInput.addEventListener('input', () => {
-  errorZipcode.textContent = '';
-  zipInput.style.backgroundColor = '#ffffff';
+  if (zipInput.validity.valid) {
+    errorZipcode.textContent = '';
+    zipInput.style.backgroundColor = '#ffffff';
+  }
 });
 
 zipInput.addEventListener('click', () => {
@@ -43,5 +51,52 @@ zipInput.addEventListener('click', () => {
     }
   });
 });
+
+passwordInput.addEventListener('input', () => {
+  if (passwordInput.validity.valid) {
+    passwordInput.textContent = '';
+    passwordInput.style.backgroundColor = '#ffffff';
+  }
+});
+
+passwordInput.addEventListener('click', () => {
+  passwordInput.addEventListener('mouseleave', () => {
+    if (passwordInput.validity.tooShort) {
+      errorPassword.textContent = 'Password must be at least 8 characters long';
+      passwordInput.style.backgroundColor = '#ffb5b5';
+    } else if (passwordInput.validity.tooLong) {
+      errorPassword.textContent =
+        'Password must be at least 16 characters long';
+      passwordInput.style.backgroundColor = '#ffb5b5';
+    } else if (passwordInput.validity.valid) {
+      errorPassword.textContent = '';
+      passwordInput.style.backgroundColor = '#ffffff';
+    }
+  });
+});
+
+confirmPasswordInput.addEventListener('click', () => {
+  confirmPasswordInput.addEventListener('mouseleave', () => {
+    if (confirmPasswordInput.value !== passwordInput.value) {
+      passwordInput.style.backgroundColor = '#ffb5b5';
+      confirmPasswordInput.style.backgroundColor = '#ffb5b5';
+      errorConfirmPassword.textContent = 'Passwords do not match';
+    }
+  });
+});
+
+confirmPasswordInput.addEventListener('input', () => {
+  if (confirmPasswordInput.value !== passwordInput.value) {
+    passwordInput.style.backgroundColor = '#ffb5b5';
+    confirmPasswordInput.style.backgroundColor = '#ffb5b5';
+    errorConfirmPassword.textContent = 'Passwords do not match';
+  } else {
+    passwordInput.style.backgroundColor = '#ffffff';
+    confirmPasswordInput.style.backgroundColor = '#ffffff';
+    errorConfirmPassword.textContent = '';
+  }
+});
+
+// passwordInput.addEventListener('click');
 
 document.addEventListener('submit', () => {});
