@@ -9,6 +9,7 @@ const errorPassword = document.querySelector('.errorPassword');
 const confirmPasswordInput = document.querySelector('#confirmPassword');
 const errorConfirmPassword = document.querySelector('.errorConfirmPassword');
 const emailInput = document.querySelector('#email');
+const errorMail = document.querySelector('.errorMail');
 const regZip = new RegExp('^[0-9]*$');
 
 countryInput.addEventListener('input', () => {
@@ -95,6 +96,22 @@ confirmPasswordInput.addEventListener('input', () => {
     confirmPasswordInput.style.backgroundColor = '#ffffff';
     errorConfirmPassword.textContent = '';
   }
+});
+
+emailInput.addEventListener('input', () => {
+  if (emailInput.validity.valid) {
+    errorMail.textContent = '';
+    emailInput.style.backgroundColor = '#ffffff';
+  }
+});
+
+emailInput.addEventListener('click', () => {
+  emailInput.addEventListener('mouseleave', () => {
+    if (emailInput.validity.typeMismatch) {
+      emailInput.style.backgroundColor = '#ffb5b5';
+      errorMail.textContent = 'Input a valid e-mail adress';
+    }
+  });
 });
 
 // passwordInput.addEventListener('click');
