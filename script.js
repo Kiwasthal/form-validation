@@ -12,8 +12,6 @@ const errorMail = document.querySelector('.errorMail');
 const button = document.querySelector('#button');
 const regZip = new RegExp('^[0-9]*$');
 
-console.log(zipInput.validity.valueMissing);
-
 let findZipErrors = () => {
   if (zipInput.value === '') {
     zipInput.style.backgroundColor = '#ffb5b5';
@@ -52,11 +50,7 @@ let findPasswordErrors = () => {
     errorPassword.textContent = 'Password must be at least 16 characters long';
     passwordInput.style.backgroundColor = '#ffb5b5';
     return false;
-  } else if (passwordInput.validity.valid) {
-    errorPassword.textContent = '';
-    passwordInput.style.backgroundColor = '#ffffff';
-    return false;
-  }
+  } else return true;
 };
 
 let PasswordsMatch = () => {
@@ -69,7 +63,7 @@ let PasswordsMatch = () => {
     confirmPasswordInput.style.backgroundColor = '#ffb5b5';
     errorConfirmPassword.textContent = '*Passwords do not match';
     return false;
-  }
+  } else return true;
 };
 
 let findEmailErrors = () => {
@@ -81,20 +75,26 @@ let findEmailErrors = () => {
     emailInput.style.backgroundColor = '#ffb5b5';
     errorMail.textContent = '*Input a valid e-mail adress';
     return false;
-  }
+  } else return true;
+};
+
+let findErrors = () => {
+  findCountryErrors();
+  findZipErrors();
+  findPasswordErrors();
+  PasswordsMatch();
+  findEmailErrors();
 };
 
 countryInput.addEventListener('input', () => {
-  countryInput.addEventListener('mouseleave', findCountryErrors);
+  if (countryInput.validity.valid) {
+    errorCountry.textContent = '';
+    countryInput.style.backgroundColor = '#ffffff';
+  }
 });
 
 countryInput.addEventListener('click', () => {
-  countryInput.addEventListener('mouseleave', () => {
-    if (countryInput.value === '') {
-      countryInput.style.backgroundColor = '#ffb5b5';
-      errorCountry.textContent = '*This field can not be empty';
-    }
-  });
+  countryInput.addEventListener('mouseleave', findCountryErrors);
 });
 
 zipInput.addEventListener('input', () => {
@@ -110,7 +110,7 @@ zipInput.addEventListener('click', () => {
 
 passwordInput.addEventListener('input', () => {
   if (passwordInput.validity.valid) {
-    passwordInput.textContent = '';
+    errorPassword.textContent = '';
     passwordInput.style.backgroundColor = '#ffffff';
   }
 });
@@ -146,4 +146,15 @@ emailInput.addEventListener('click', () => {
   emailInput.addEventListener('mouseleave', findEmailErrors);
 });
 
-form.addEventListener('submit', function (event) {});
+form.addEventListener('submit', function (event) {
+  findErrors();
+  if (
+    findCountryErrors() &&
+    findZipErrors() &&
+    findPasswordErrors() &&
+    PasswordsMatch() &&
+    findEmailErrors()
+  ) {
+    alert('You win');
+  } else event.preventDefault();
+});
