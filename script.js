@@ -155,6 +155,6 @@ form.addEventListener('submit', function (event) {
     PasswordsMatch() &&
     findEmailErrors()
   ) {
-    alert('You win');
+    alert('Congratulations, you submitted the form');
   } else event.preventDefault();
 });
