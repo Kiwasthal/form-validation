@@ -20,6 +20,7 @@
               id="country"
               name="country"
               placeholder="Enter your country"
+              required
             />
             <span class="errorCountry"></span>
           </div>
@@ -30,6 +31,9 @@
               id="zipcode"
               name="zipcode"
               placeholder="Enter your Zip-Code"
+              required
+              minlength="4"
+              maxlength="5"
             />
             <span class="errorZipcode"></span>
           </div>
@@ -40,6 +44,7 @@
               id="password"
               name="password"
               placeholder="Enter your password"
+              required
             />
             <span class="errorPassword"></span>
           </div>
@@ -50,6 +55,7 @@
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Rewrite your password"
+              required
             />
             <span class="errorConfirmPassword"></span>
           </div>
@@ -60,11 +66,14 @@
               id="email"
               name="email"
               placeholder="Write your email"
+              required
             />
             <span class="errorMail"></span>
           </div>
         </div>
-        <div class="button"><input type="submit" value="Register" /></div>
+        <div class="button">
+          <input type="submit" value="Register" />
+        </div>
       </form>
     </div>
   </body>
